@@ -56,18 +56,4 @@ Includes features like location-based charity reccomendatioins, Apple Pay integr
 
 ---
 
-## 🤝 Get Involved
-
-WhyDonate welcomes contributions, feedback, and partnerships. Whether you’re a developer, designer, or nonprofit organization interested in collaborating, reach out!
-
----
-
-## 📬 Contact
-
-Developed by **Jibryll Brinkley**  
-[LinkedIn](https://www.linkedin.com/in/jibryllbrinkley)  
-[Email](jibryll.s.brinkley@gmail.com)
-
----
-
 *WhyDonate — Making giving effortless and impactful.*
