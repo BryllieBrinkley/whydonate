@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct WhyDonateApp: App {
+    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if hasSeenOnboarding {
+                MainTabView()
+            } else {
+                OnboardingView()
+            }
         }
     }
 }
