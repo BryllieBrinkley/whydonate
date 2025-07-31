@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FeaturedCharitiesSection: View {
-    @ObservedObject var viewModel: CharityViewModel
+    @ObservedObject var viewModel: HomeViewModel
 
     var body: some View {
         VStack(alignment: .leading) {

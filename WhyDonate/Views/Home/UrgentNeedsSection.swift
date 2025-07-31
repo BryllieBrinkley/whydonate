@@ -4,7 +4,7 @@ struct UrgentNeedsSection: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text("Urgent Needs / Crisis Relief")
-                .font(.headline)
+                .font(.title)
                 .padding(.horizontal)
 
             ScrollView(.horizontal, showsIndicators: false) {
