@@ -17,7 +17,7 @@ struct WhyDonateApp: App {
             Group {
                 if appState.isInitializing {
                     SplashView()
-                        .task {
+                        .compatibleTask {
                             await appState.initialize()
                         }
                 } else if hasSeenOnboarding {
@@ -54,7 +54,7 @@ class AppState: ObservableObject {
         await networkCheck
         
         // Add minimum splash duration for better UX
-        try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
+        try? await Task.compatibleSleep(seconds: 1.0)
         
         isInitializing = false
     }

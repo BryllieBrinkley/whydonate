@@ -41,7 +41,7 @@ struct SuggestedByCauseSection: View {
                 }
                 .padding(.horizontal)
             }
-            .scrollClipDisabled()
+            .conditionalScrollClipDisabled()
             
             // Suggested charities based on selected cause
             if let selectedCause = selectedCause {
@@ -73,7 +73,7 @@ struct SuggestedByCauseSection: View {
                             }
                             .padding(.horizontal)
                         }
-                        .scrollClipDisabled()
+                        .conditionalScrollClipDisabled()
                     }
                     .transition(.opacity.combined(with: .move(edge: .top)))
                 } else {

@@ -96,7 +96,7 @@ struct CrisisReliefCardView: View {
                     }
                     
                     ProgressView(value: progress)
-                        .progressViewStyle(LinearProgressViewStyle(tint: urgencyLevel.color))
+                        .progressViewStyle(.tinted(urgencyLevel.color))
                         .scaleEffect(y: 1.2)
                 }
             }

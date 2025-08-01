@@ -87,7 +87,7 @@ struct CharityDetailView: View {
                             }
                             
                             ProgressView(value: charity.progress)
-                                .progressViewStyle(LinearProgressViewStyle(tint: .blue))
+                                .progressViewStyle(.tinted(.blue))
                                 .scaleEffect(y: 2.0)
                             
                             HStack {
@@ -240,7 +240,7 @@ struct DonationSheet: View {
     private let suggestedAmounts = [25, 50, 100, 250]
     
     var body: some View {
-        NavigationStack {
+        CompatibleNavigationStack {
             VStack(spacing: 24) {
                 // Header
                 VStack(spacing: 8) {
@@ -328,7 +328,7 @@ struct DonationSheet: View {
 
 // MARK: - Preview
 #Preview {
-    NavigationStack {
+    CompatibleNavigationStack {
         CharityDetailView(
             charity: CharityModel(
                 name: "St. Jude Children's Research Hospital",

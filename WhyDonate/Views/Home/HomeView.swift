@@ -5,7 +5,7 @@ struct HomeView: View {
     @ObservedObject private var viewModel = CharityViewModel.shared
     
     var body: some View {
-        NavigationStack {
+        CompatibleNavigationStack {
             ScrollView {
                 LazyVStack(spacing: 24) {
                     if viewModel.isLoading && viewModel.allCharities.isEmpty {
@@ -47,10 +47,10 @@ struct HomeView: View {
                 .padding(.vertical, 16)
             }
             .navigationTitle("Home")
-            .refreshable {
+            .compatibleRefreshable {
                 await viewModel.refreshData()
             }
-            .task {
+            .compatibleTask {
                 // Load data on appear if needed
                 if viewModel.allCharities.isEmpty && !viewModel.isLoading {
                     await viewModel.refreshData()

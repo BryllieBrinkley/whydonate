@@ -1,6 +1,6 @@
 import Foundation
 import SwiftUI
-import os.log
+import os
 
 // MARK: - Performance Monitor
 @MainActor
@@ -10,33 +10,35 @@ class PerformanceMonitor: ObservableObject {
     @Published var metrics: [PerformanceMetric] = []
     @Published var isMonitoring = false
     
-    private let logger = Logger(subsystem: "com.whydonate.app", category: "Performance")
+    private let logger: OSLog
     private var startTimes: [String: CFTimeInterval] = [:]
     private let maxMetrics = 100 // Keep only the latest 100 metrics
     
-    private init() {}
+    private init() {
+        self.logger = OSLog(subsystem: "com.whydonate.app", category: "Performance")
+    }
     
     // MARK: - Public Methods
     func startMonitoring() {
         isMonitoring = true
-        logger.info("Performance monitoring started")
+        os_log("Performance monitoring started", log: logger, type: .info)
     }
     
     func stopMonitoring() {
         isMonitoring = false
-        logger.info("Performance monitoring stopped")
+        os_log("Performance monitoring stopped", log: logger, type: .info)
     }
     
     func startTimer(for operation: String) {
         guard isMonitoring else { return }
         startTimes[operation] = CACurrentMediaTime()
-        logger.debug("Started timing: \(operation)")
+        os_log("Started timing: %@", log: logger, type: .debug, operation)
     }
     
     func endTimer(for operation: String, category: MetricCategory = .general) {
         guard isMonitoring else { return }
         guard let startTime = startTimes[operation] else {
-            logger.warning("No start time found for operation: \(operation)")
+            os_log("No start time found for operation: %@", log: logger, type: .error, operation)
             return
         }
         
@@ -51,7 +53,7 @@ class PerformanceMonitor: ObservableObject {
         addMetric(metric)
         startTimes.removeValue(forKey: operation)
         
-        logger.info("Completed \(operation) in \(String(format: "%.3f", duration * 1000))ms")
+        os_log("Completed %@ in %.3fms", log: logger, type: .info, operation, duration * 1000)
     }
     
     func recordMetric(operation: String, duration: TimeInterval, category: MetricCategory = .general) {
@@ -65,7 +67,7 @@ class PerformanceMonitor: ObservableObject {
         )
         
         addMetric(metric)
-        logger.info("Recorded \(operation): \(String(format: "%.3f", duration * 1000))ms")
+        os_log("Recorded %@: %.3fms", log: logger, type: .info, operation, duration * 1000)
     }
     
     func getAverageTime(for operation: String) -> TimeInterval? {
@@ -82,7 +84,7 @@ class PerformanceMonitor: ObservableObject {
     
     func clearMetrics() {
         metrics.removeAll()
-        logger.info("Performance metrics cleared")
+        os_log("Performance metrics cleared", log: logger, type: .info)
     }
     
     func exportMetrics() -> String {
@@ -105,7 +107,7 @@ class PerformanceMonitor: ObservableObject {
         
         // Log warning for slow operations
         if metric.duration > 2.0 {
-            logger.warning("Slow operation detected: \(metric.operation) took \(String(format: "%.3f", metric.duration * 1000))ms")
+            os_log("Slow operation detected: %@ took %.3fms", log: logger, type: .error, metric.operation, metric.duration * 1000)
         }
     }
 }
@@ -202,7 +204,7 @@ struct PerformanceDashboard: View {
                         Text(category.rawValue).tag(category)
                     }
                 }
-                .pickerStyle(SegmentedPickerStyle())
+                .pickerStyle(.segmented)
                 .padding(.horizontal)
                 
                 // Summary stats

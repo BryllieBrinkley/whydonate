@@ -19,7 +19,7 @@ struct ExploreView: View {
     }
     
     var body: some View {
-        NavigationStack {
+        CompatibleNavigationStack {
             VStack(spacing: 0) {
                 // Search and filter header
                 VStack(spacing: 16) {
@@ -63,7 +63,7 @@ struct ExploreView: View {
                         }
                         .padding(.horizontal)
                     }
-                    .scrollClipDisabled()
+                    .conditionalScrollClipDisabled()
                 }
                 .padding(.vertical, 16)
                 .background(Color(.systemBackground))
@@ -119,7 +119,7 @@ struct ExploreView: View {
                         }
                         .padding()
                     }
-                    .refreshable {
+                    .compatibleRefreshable {
                         await viewModel.refreshData()
                     }
                 }
@@ -128,7 +128,7 @@ struct ExploreView: View {
             }
             .navigationTitle("Explore")
             .navigationBarTitleDisplayMode(.large)
-            .task {
+            .compatibleTask {
                 // Load data on appear if needed
                 if viewModel.allCharities.isEmpty && !viewModel.isLoading {
                     await viewModel.refreshData()

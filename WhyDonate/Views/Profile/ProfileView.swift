@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ProfileView: View {
     var body: some View {
-        NavigationStack {
+        CompatibleNavigationStack {
             VStack(spacing: 20) {
                 Image(systemName: "person.crop.circle.fill")
                     .resizable()

@@ -41,7 +41,7 @@ class CharityViewModel: ObservableObject {
         
         do {
             // Simulate network delay and add realistic data
-            try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
+            try await Task.compatibleSleep(seconds: 1.0)
             
             let newCharities = generateSampleCharities()
             

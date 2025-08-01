@@ -56,7 +56,7 @@ struct LocalCharitiesSection: View {
                 .padding(.horizontal)
                 .padding(.vertical, 4)
             }
-            .scrollClipDisabled()
+            .conditionalScrollClipDisabled()
         }
     }
     

@@ -68,7 +68,7 @@ struct CharityCardView: View {
                     }
                     
                     ProgressView(value: charity.progress)
-                        .progressViewStyle(LinearProgressViewStyle(tint: .blue))
+                        .progressViewStyle(.tinted(.blue))
                         .scaleEffect(y: 0.8)
                 }
             }

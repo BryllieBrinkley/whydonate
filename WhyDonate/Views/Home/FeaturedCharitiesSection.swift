@@ -47,7 +47,7 @@ struct FeaturedCharitiesSection: View {
                 .padding(.horizontal)
                 .padding(.vertical, 4)
             }
-            .scrollClipDisabled()
+            .conditionalScrollClipDisabled()
         }
     }
 }
