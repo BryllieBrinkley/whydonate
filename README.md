@@ -1,7 +1,7 @@
 # 📱 WhyDonate
 
 WhyDonate is an iOS application engineered to streamline and secure the charitable giving process.
-Includes features like location-based charity reccomendatioins, Apple Pay integration, and donation history tracking, WhyDonate delivers a reliable, scalable, and intuitive platform for impactful giving.
+It uses the Charity Navigator API and includes features like location-based charity reccomendatioins, Apple Pay integration, and donation history tracking for tax purposes. WhyDonate delivers a reliable and intuitive platform for impactful giving.
 
 ---
 
