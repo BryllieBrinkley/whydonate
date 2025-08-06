@@ -119,7 +119,7 @@ final class ExploreViewModel: ObservableObject {
             filtered = filtered.filter { charity in
                 charity.name.localizedCaseInsensitiveContains(self.searchText) ||
                 charity.description.localizedCaseInsensitiveContains(self.searchText) ||
-                charity.category?.localizedCaseInsensitiveContains(self.searchText) == true
+                charity.category.localizedCaseInsensitiveContains(self.searchText) == true
             }
         }
         

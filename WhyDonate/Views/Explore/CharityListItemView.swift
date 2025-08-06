@@ -37,17 +37,15 @@ struct CharityListItemView: View {
                                 .foregroundColor(Color(red: 0.1, green: 0.2, blue: 0.4))
                                 .lineLimit(2)
                             
-                            if let category = charity.category {
-                                Text(category)
-                                    .font(.system(size: 12, weight: .medium))
-                                    .padding(.horizontal, 8)
-                                    .padding(.vertical, 4)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 6)
-                                            .fill(Color(red: 0.0, green: 0.3, blue: 0.4).opacity(0.1))
-                                    )
-                                    .foregroundColor(Color(red: 0.0, green: 0.3, blue: 0.4))
-                            }
+                            Text(charity.category)
+                                .font(.system(size: 12, weight: .medium))
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 6)
+                                        .fill(Color(red: 0.0, green: 0.3, blue: 0.4).opacity(0.1))
+                                )
+                                .foregroundColor(Color(red: 0.0, green: 0.3, blue: 0.4))
                         }
                         
                         Spacer()
@@ -105,7 +103,7 @@ struct CharityListItemView: View {
                                 Image(systemName: "location.fill")
                                     .font(.system(size: 12, weight: .medium))
                                     .foregroundColor(.secondary)
-                                Text(location.displayAddress)
+                                Text(location)
                                     .font(.system(size: 12, weight: .medium))
                                     .foregroundColor(.secondary)
                             }
@@ -218,13 +216,13 @@ struct CharityListItemView: View {
         name: "American Red Cross",
         description: "Humanitarian organization providing emergency assistance, disaster relief, and education",
         imageName: "red-cross",
-        ein: "53-0196605",
-        mission: "To prevent and alleviate human suffering in the face of emergencies by mobilizing the power of volunteers and the generosity of donors.",
         category: "Disaster Relief",
-        location: CharityLocation(city: "Washington", state: "DC", country: "USA", zipCode: "20006"),
-        website: "https://www.redcross.org",
-        rating: 4.5,
-        verified: true
+        isUrgent: true,
+        verified: true,
+        donationGoal: 500000,
+        amountRaised: 350000,
+        location: "Washington, DC",
+        website: "https://www.redcross.org"
     ))
     .padding()
     .background(Color.gray.opacity(0.1))

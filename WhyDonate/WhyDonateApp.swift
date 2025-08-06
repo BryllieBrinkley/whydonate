@@ -13,47 +13,143 @@ import os.log
 struct WhyDonateApp: App {
     // MARK: - Properties
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
-    private let logger = Logger(subsystem: "com.whydonate.app", category: "App")
+    @StateObject private var appState = AppState()
     
-    // MARK: - Body
     var body: some Scene {
         WindowGroup {
             Group {
-                if hasSeenOnboarding {
-                    MainTabView()
-                        .onAppear {
-                            logger.info("App launched - showing main interface")
+                if appState.isInitializing {
+                    SplashView()
+                        .task {
+                            await appState.initialize()
                         }
+                } else if hasSeenOnboarding {
+                    MainTabView()
+                        .environmentObject(appState)
                 } else {
                     OnboardingView()
-                        .onAppear {
-                            logger.info("App launched - showing onboarding")
-                        }
+                        .environmentObject(appState)
                 }
             }
-            .onAppear {
-                setupApp()
+            .preferredColorScheme(appState.colorScheme)
+        }
+    }
+}
+
+// MARK: - App State Manager
+@MainActor
+class AppState: ObservableObject {
+    @Published var isInitializing = true
+    @Published var colorScheme: ColorScheme? = nil
+    @Published var hasNetworkConnection = true
+    
+    private let charityViewModel = CharityViewModel.shared
+    
+    func initialize() async {
+        // Simulate app initialization and preload critical data
+        async let charityDataLoad: Void = preloadCharityData()
+        async let settingsLoad: Void = loadUserSettings()
+        async let networkCheck: Void = checkNetworkConnection()
+        
+        // Wait for all initialization tasks
+        await charityDataLoad
+        await settingsLoad
+        await networkCheck
+        
+        // Add minimum splash duration for better UX
+        try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
+        
+        isInitializing = false
+    }
+    
+    private func preloadCharityData() async {
+        // Load cached data first, then refresh if needed
+        charityViewModel.loadInitialData()
+        
+        // If no cached data, load fresh data
+        if charityViewModel.allCharities.isEmpty {
+            await charityViewModel.refreshData()
+        }
+    }
+    
+    private func loadUserSettings() async {
+        // Load user preferences
+        if let colorSchemeRaw = UserDefaults.standard.object(forKey: "colorScheme") as? String {
+            switch colorSchemeRaw {
+            case "dark":
+                colorScheme = .dark
+            case "light":
+                colorScheme = .light
+            default:
+                colorScheme = nil
             }
         }
     }
     
-    // MARK: - Private Methods
-    private func setupApp() {
-        // Configure app-wide settings
-        configureAppearance()
-        logger.info("WhyDonate app initialized")
+    private func checkNetworkConnection() async {
+        // Basic network connectivity check
+        // In a real app, you might use Network framework
+        hasNetworkConnection = true
     }
     
-    private func configureAppearance() {
-        // Set up global appearance for consistent styling
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor(Color(red: 0.1, green: 0.2, blue: 0.4))
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+    func updateColorScheme(_ scheme: ColorScheme?) {
+        colorScheme = scheme
         
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
-        UINavigationBar.appearance().compactAppearance = appearance
+        let schemeString: String
+        switch scheme {
+        case .dark:
+            schemeString = "dark"
+        case .light:
+            schemeString = "light"
+        case nil:
+            schemeString = "system"
+        }
+        
+        UserDefaults.standard.set(schemeString, forKey: "colorScheme")
+    }
+}
+
+// MARK: - Splash View
+struct SplashView: View {
+    @State private var logoScale: CGFloat = 0.8
+    @State private var logoOpacity: Double = 0.0
+    
+    var body: some View {
+        ZStack {
+            Color(.systemBackground)
+                .ignoresSafeArea()
+            
+            VStack(spacing: 24) {
+                // App logo/icon
+                Image(systemName: "heart.fill")
+                    .font(.system(size: 80))
+                    .foregroundColor(.blue)
+                    .scaleEffect(logoScale)
+                    .opacity(logoOpacity)
+                    .onAppear {
+                        withAnimation(.easeInOut(duration: 1.0)) {
+                            logoScale = 1.0
+                            logoOpacity = 1.0
+                        }
+                    }
+                
+                VStack(spacing: 8) {
+                    Text("WhyDonate")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .opacity(logoOpacity)
+                    
+                    Text("Making giving effortless and impactful")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .opacity(logoOpacity)
+                }
+                
+                ProgressView()
+                    .scaleEffect(1.2)
+                    .opacity(logoOpacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.8).delay(0.2), value: logoOpacity)
     }
 }
